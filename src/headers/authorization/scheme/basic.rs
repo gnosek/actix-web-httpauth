@@ -3,7 +3,7 @@ use std::fmt;
 use std::str;
 
 use actix_web::http::header::{
-    HeaderValue, IntoHeaderValue, InvalidHeaderValueBytes,
+    HeaderValue, IntoHeaderValue, InvalidHeaderValue,
 };
 use base64;
 use bytes::{BufMut, BytesMut};
@@ -81,10 +81,7 @@ impl Scheme for Basic {
                 }
             })?;
 
-        Ok(Basic {
-            user_id,
-            password,
-        })
+        Ok(Basic { user_id, password })
     }
 }
 
@@ -101,7 +98,7 @@ impl fmt::Display for Basic {
 }
 
 impl IntoHeaderValue for Basic {
-    type Error = InvalidHeaderValueBytes;
+    type Error = InvalidHeaderValue;
 
     fn try_into(self) -> Result<HeaderValue, <Self as IntoHeaderValue>::Error> {
         let mut credentials = BytesMut::with_capacity(
@@ -120,10 +117,10 @@ impl IntoHeaderValue for Basic {
         // directly to `value`
         let encoded = base64::encode(&credentials);
         let mut value = BytesMut::with_capacity(6 + encoded.len());
-        value.put("Basic ");
-        value.put(&encoded);
+        value.put(&b"Basic "[..]);
+        value.put(encoded.as_bytes());
 
-        HeaderValue::from_shared(value.freeze())
+        HeaderValue::from_maybe_shared(value.freeze())
     }
 }
 
