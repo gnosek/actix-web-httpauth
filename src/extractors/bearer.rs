@@ -61,7 +61,7 @@ impl AuthExtractorConfig for Config {
 /// ```rust
 /// use actix_web_httpauth::extractors::bearer::BearerAuth;
 ///
-/// fn index(auth: BearerAuth) -> String {
+/// async fn index(auth: BearerAuth) -> String {
 ///     format!("Hello, user with token {}!", auth.token())
 /// }
 /// ```
@@ -76,7 +76,7 @@ impl AuthExtractorConfig for Config {
 /// use actix_web::{web, App};
 /// use actix_web_httpauth::extractors::bearer::{BearerAuth, Config};
 ///
-/// fn index(auth: BearerAuth) -> String {
+/// async fn index(auth: BearerAuth) -> String {
 ///     format!("Hello, {}!", auth.token())
 /// }
 ///

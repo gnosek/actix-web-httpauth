@@ -65,7 +65,6 @@ where
     /// ```rust
     /// # use actix_web::Error;
     /// # use actix_web::dev::ServiceRequest;
-    /// # use futures::future::{self, FutureResult};
     /// # use actix_web_httpauth::middleware::HttpAuthentication;
     /// # use actix_web_httpauth::extractors::basic::BasicAuth;
     /// // In this example validator returns immediately,
@@ -73,12 +72,12 @@ where
     /// // that implements `IntoFuture` trait,
     /// // it can be extended to query database
     /// // or to do something else in a async manner.
-    /// fn validator(
+    /// async fn validator(
     ///     req: ServiceRequest,
     ///     credentials: BasicAuth,
-    /// ) -> FutureResult<ServiceRequest, Error> {
+    /// ) -> Result<ServiceRequest, Error> {
     ///     // All users are great and more than welcome!
-    ///     future::ok(req)
+    ///     Ok(req)
     /// }
     ///
     /// let middleware = HttpAuthentication::basic(validator);
@@ -101,20 +100,19 @@ where
     /// ```rust
     /// # use actix_web::Error;
     /// # use actix_web::dev::ServiceRequest;
-    /// # use futures::future::{self, FutureResult};
     /// # use actix_web_httpauth::middleware::HttpAuthentication;
     /// # use actix_web_httpauth::extractors::bearer::{Config, BearerAuth};
     /// # use actix_web_httpauth::extractors::{AuthenticationError, AuthExtractorConfig};
-    /// fn validator(req: ServiceRequest, credentials: BearerAuth) -> FutureResult<ServiceRequest, Error> {
+    /// async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
     ///     if credentials.token() == "mF_9.B5f-4.1JqM" {
-    ///         future::ok(req)
+    ///         Ok(req)
     ///     } else {
     ///         let config = req.app_data::<Config>()
     ///             .map(|data| data.get_ref().clone())
     ///             .unwrap_or_else(Default::default)
     ///             .scope("urn:example:channel=HBO&urn:example:rating=G,PG-13");
     ///
-    ///         future::err(AuthenticationError::from(config).into())
+    ///         Err(AuthenticationError::from(config).into())
     ///     }
     /// }
     ///

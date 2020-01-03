@@ -58,7 +58,7 @@ impl AuthExtractorConfig for Config {
 /// use actix_web::Result;
 /// use actix_web_httpauth::extractors::basic::BasicAuth;
 ///
-/// fn index(auth: BasicAuth) -> String {
+/// async fn index(auth: BasicAuth) -> String {
 ///     format!("Hello, {}!", auth.user_id())
 /// }
 /// ```
@@ -73,7 +73,7 @@ impl AuthExtractorConfig for Config {
 /// use actix_web::{web, App};
 /// use actix_web_httpauth::extractors::basic::{BasicAuth, Config};
 ///
-/// fn index(auth: BasicAuth) -> String {
+/// async fn index(auth: BasicAuth) -> String {
 ///     format!("Hello, {}!", auth.user_id())
 /// }
 ///
